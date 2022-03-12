@@ -37,7 +37,7 @@ int main(int argc, char *argv[]){
 	exit(0);
       }
       
-      if (strcmp(token, "exit") == 0){
+      else if (strcmp(token, "exit") == 0){
 	token = strtok(NULL, " ");
 		
 	if (isdigit(token[0]) != 0){
@@ -48,41 +48,42 @@ int main(int argc, char *argv[]){
 	  command = NULL;
 	  
 	  exit(code);
-	}	
+	}
+	free(command);
+	command = NULL;	
       }
       
-      char * command_arr[chars_read][chars_read + 1];
+      else {
+        char command_arr[chars_read][chars_read + 1];
       
-      int count = 0;
-      while (token != NULL){
-        strcpy(command_arr[count], token);
-        count++;
-        token = strtok(NULL, " ");
-      }
+        int count = 0;
+        while (token != NULL){
+          strcpy(command_arr[count], token);
+          count++;
+          token = strtok(NULL, " ");
+        }
       
-      for (int i = 0; i < count; i++){
-        printf("The command word is: %s\n", command_arr[i]);
-      }
-      
-      
-      /*if (strcmp(token, "ls\n") == 0){
+        int null_index = strcspn(command_arr[count - 1], "\n");
+        command_arr[count - 1][null_index] = 0;
+
+      	int error = 0;
         if (fork() == 0){
-        
-          printf("ls command called\n");
-          char *binaryPath = "/bin/ls";
-          execl(binaryPath, binaryPath, NULL);
-          //make sure to handle if exec fails
+          char binaryPath[] = "/bin/";
+          strcat(binaryPath, command_arr[0]);
+          error = execl(binaryPath, binaryPath, NULL);
         }
         wait(NULL);
-      }*/
-      
-      
+        
+        if (error == -1){
+          free(command);
+          command = NULL;
+          exit(0);
+        }
+        
 
-      // parse argument, call shell command
-      //char command_arr[][]
-
-      free(command);
-      command = NULL;
+        free(command);
+        command = NULL;
+      }
     }
   }
 
