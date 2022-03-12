@@ -55,6 +55,7 @@ int main(int argc, char *argv[]){
       
       else {
         char command_arr[chars_read][chars_read + 1];
+      	// unescape thingy
       
         int count = 0;
         while (token != NULL){
@@ -66,6 +67,12 @@ int main(int argc, char *argv[]){
         int null_index = strcspn(command_arr[count - 1], "\n");
         command_arr[count - 1][null_index] = 0;
 
+        const char *arg_arr[count + 1];
+        for (int i = 0; i < count; i++){
+          arg_arr[i] = command_arr[i];
+        }
+        arg_arr[count] = NULL;
+
       	int error = 0;
         if (fork() == 0){
           char binary_path[] = "";
@@ -73,7 +80,7 @@ int main(int argc, char *argv[]){
             strcpy(binary_path, "/bin/");
           }
           strcat(binary_path, command_arr[0]);
-          error = execl(binary_path, binary_path, NULL);
+          error = execv(binary_path, arg_arr);
         }
         wait(NULL);
         
