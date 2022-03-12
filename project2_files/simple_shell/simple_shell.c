@@ -68,9 +68,12 @@ int main(int argc, char *argv[]){
 
       	int error = 0;
         if (fork() == 0){
-          char binaryPath[] = "/bin/";
-          strcat(binaryPath, command_arr[0]);
-          error = execl(binaryPath, binaryPath, NULL);
+          char binary_path[] = "";
+          if (strncmp("/bin/", command_arr[0], 5) != 0){
+            strcpy(binary_path, "/bin/");
+          }
+          strcat(binary_path, command_arr[0]);
+          error = execl(binary_path, binary_path, NULL);
         }
         wait(NULL);
         
