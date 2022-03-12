@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <unistd.h>
+#include "utils.h"
 
 int main(int argc, char *argv[]){
 
@@ -55,7 +56,6 @@ int main(int argc, char *argv[]){
       
       else {
         char command_arr[chars_read][chars_read + 1];
-      	// unescape thingy
       
         int count = 0;
         while (token != NULL){
@@ -69,7 +69,8 @@ int main(int argc, char *argv[]){
 
         const char *arg_arr[count + 1];
         for (int i = 0; i < count; i++){
-          arg_arr[i] = command_arr[i];
+          char *unescaped = unescape(command_arr[i], stderr);
+          arg_arr[i] = unescaped;
         }
         arg_arr[count] = NULL;
 
@@ -85,12 +86,12 @@ int main(int argc, char *argv[]){
         wait(NULL);
         
         if (error == -1){
-          free(command);
-          command = NULL;
           exit(0);
         }
         
-
+        for (int i = 0; i < count + 1; i++){
+          free(arg_arr[i]);
+        }
         free(command);
         command = NULL;
       }
