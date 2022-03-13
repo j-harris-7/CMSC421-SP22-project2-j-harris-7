@@ -54,6 +54,34 @@ int main(int argc, char *argv[]){
 	command = NULL;	
       }
       
+      if (strcmp(token, "proc") == 0){
+        token = strtok(NULL, " ");
+        char file_name[chars_read];
+        strcpy(file_name, "/proc/");
+        strcat(file_name, token);
+        
+        int null_index = strcspn(file_name, "\n");
+        file_name[null_index] = 0;
+        
+        FILE *file = fopen(file_name, "r");
+        
+        if (file == NULL){
+          printf("File does not exist!\n");
+        } else{
+          char c = fgetc(file);
+          while (c != EOF){
+            printf("%c", c);
+            c = fgetc(file);
+          }
+          printf("\n");
+          
+          fclose(file);
+        }
+        
+        free(command);
+        command = NULL;
+      }
+      
       else {
         char command_arr[chars_read][chars_read + 1];
       
