@@ -8,6 +8,7 @@
 
 struct node *temp = NULL;
 struct node **head = &temp;
+int length = 0;
 
 // add a task to the list 
 void add(char *name, int priority, int burst){
@@ -19,11 +20,12 @@ void add(char *name, int priority, int burst){
   ptr->burst = burst;
 
   insert(head, ptr);
+  length++;
 }
 
 // invoke the scheduler
 void schedule(){
-  printf("EXPLAINED: This algorithm simply runs each task in the order they're found in the list.\n");
+  printf("This algorithm simply runs each task in the order they're found in the list.\n");
 
   printf("Starts at head, moves to next.\n");
   struct node *curr = *head;
